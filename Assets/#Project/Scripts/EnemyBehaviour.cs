@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour, IPoolClient
 {
-    [HideInInspector] public SpawnPoint spawn;
-    [SerializeField] private float speed = 5f;
+    public bool Alive => gameObject.activeInHierarchy; // Alias
 
 
-    private void Update()
+    [SerializeField] private Vector3 speed = Vector3.left * 10f;
+    private GameManager gameManager;
+
+
+    public void Initialize(GameManager gameManager)
     {
-        transform.position += -Vector3.right * speed * Time.deltaTime;
+        this.gameManager = gameManager;
     }
 
     public void WakeUp(Vector3 position, Quaternion rotation)
@@ -16,12 +19,20 @@ public class EnemyBehaviour : MonoBehaviour, IPoolClient
         gameObject.SetActive(true);
         transform.SetPositionAndRotation(position, rotation);
     }
+    
+    public void Process()
+    {
+        if (!Alive) return;
+
+        transform.Translate(speed * Time.deltaTime);
+    }
+    
     public void Sleep()
     {
         gameObject.SetActive(false);
     }
     private void OnBecameInvisible()
     {
-        spawn.Teleport(this);
+        gameManager.EnemyFallAsleep(this);
     }
 }

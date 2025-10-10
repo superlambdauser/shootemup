@@ -1,29 +1,25 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// A Pool can be seen as a discard in which you can draw
 public class Pool<T>
 where T : IPoolClient
 {
-    public Vector3 startingPos;
-    private Transform anchor;
-    private GameObject prefab;
-    private Queue<T> queue = new();
-    [SerializeField] private Camera cam = Camera.main;
-    private SpawnPoint spawn;
+    private GameObject prefab; 
+    private Queue<T> queue = new(); 
     private int batch;
 
 
-    public Pool(Transform anchor, GameObject prefab, SpawnPoint spawn, int batch)
+    public Pool(GameObject prefab, int batch)
     {
-        this.anchor = anchor;
-        this.prefab = prefab;
-        this.spawn = spawn;
-        this.batch = batch;
+        if (prefab.GetComponent<IPoolClient>() == null)
+        {
+            throw new System.ArgumentException("Prefab must implement IPoolClient Interface.");
+        }
 
-        startingPos = new(Screen.width, 0, 0);
-        startingPos = cam.ScreenToWorldPoint(startingPos);
-        spawn.transform.position = startingPos;
+        this.prefab = prefab;
+        this.batch = batch;
 
         CreateBatch();
     }
@@ -34,20 +30,13 @@ where T : IPoolClient
         client.Sleep();
     }
 
-    public T Get()
+    public T Get(Vector3 position, Quaternion rotation)
     {
-        if (queue.Count == 0)
-        {
-            CreateBatch();
-        }
-
-        float rnd = UnityEngine.Random.Range(Screen.height, -Screen.height);
-        startingPos.y = rnd;
-        startingPos.z = 10;
-        startingPos = cam.ScreenToWorldPoint(startingPos);
+        if (queue.Count == 0) CreateBatch();
 
         T client = queue.Dequeue();
-        client.WakeUp(startingPos, anchor.rotation);
+
+        client.WakeUp(position, rotation);
 
         return client;
     }
@@ -56,17 +45,11 @@ where T : IPoolClient
     {
         for (int _ = 0; _ < batch; _++)
         {
-            GameObject gameObj = UnityEngine.Object.Instantiate(prefab);
+            GameObject gameObj = Object.Instantiate(prefab);
 
-            if (gameObj.TryGetComponent(out T client))
-            {
-                Add(client);
-            }
+            T client = gameObj.GetComponent<T>();
 
-            else
-            {
-                throw new ArgumentException("Invalid type for the prefab. It needs to implement an IPoolClient Interface.");
-            }
+            Add(client);
         }
     }
 
