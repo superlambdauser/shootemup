@@ -44,15 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7efa53723bc310f4f9affe647cf2f082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraManager: {fileID: 1260275597984342084, guid: 2fd5f03856a90a44e98e953929c52a69, type: 3}
   gameManager: {fileID: 362711942488072174, guid: e32274484a2e06e46b0549fbab03369d, type: 3}
+  cameraManager: {fileID: 1260275597984342084, guid: 2fd5f03856a90a44e98e953929c52a69, type: 3}
   player: {fileID: -1398686790902247414, guid: 5e095488896c7b7488aaace5d374a89a, type: 3}
   actions: {fileID: -944628639613478452, guid: d2330c072dc089447873a10e8fb390cd, type: 3}
   playerPosition: {x: 0, y: 0, z: 0}
+  cameraPosition: {x: 0, y: 0, z: -10}
+  cameraRotation: {x: 0, y: 0, z: 0, w: 0}
   enemyPrefab: {fileID: 106192934948470855, guid: 8b7d964bedaacb3419fcfceaacac8a82, type: 3}
   spawner: {fileID: 2293894128128159241, guid: 98938f80d5dca304ea99cb68e4ed4bc5, type: 3}
-  cameraPosition: {x: 0, y: 0, z: 0}
-  cameraRotation: {x: 0, y: 0, z: 0, w: 0}
   batch: 10
   cooldown: 1
   distanceFromCamera: 10

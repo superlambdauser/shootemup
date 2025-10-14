@@ -4,23 +4,35 @@ using UnityEngine.InputSystem;
 
 public class GameInitializer : MonoBehaviour
 {
-    [SerializeField] private CameraManager cameraManager;
+    [Header("Game Data :")]
+
+    [Header("Managers :")]
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private CameraManager cameraManager;
+
+    [Header("Player :")]
     [SerializeField] private PlayerControl player;
     [SerializeField] private InputActionAsset actions;
     [SerializeField] private Vector3 playerPosition;
-    [SerializeField] private EnemyBehaviour enemyPrefab;
-    [SerializeField] private Spawner spawner;
+
+    [Header("Camera :")]
     [SerializeField] private Vector3 cameraPosition;
     [SerializeField] private Quaternion cameraRotation;
+
+    [Header("Enemes :")]
+    [SerializeField] private EnemyBehaviour enemyPrefab;
+
+    [Header("Spawner :")]
+    [SerializeField] private Spawner spawner;
     [SerializeField] private int batch;
     [SerializeField] private float cooldown;
+
+    [Header("Screen/World positions data :")]
     [SerializeField] private float distanceFromCamera = 10;
 
 
     private void Start()
     {
-        
         CreateObjects();
         InitializeObjects();
         Destroy(gameObject);
@@ -38,7 +50,7 @@ public class GameInitializer : MonoBehaviour
         cameraManager.Initialize(cameraPosition, cameraRotation);
         (Vector3 min, Vector3 max) = cameraManager.GetRightBorderPoints(distanceFromCamera);
         playerPosition = new (0f, 0f, distanceFromCamera);
-        player.Initialize(actions, playerPosition, min, max);
+        player.Initialize(actions, playerPosition, cameraManager.cam);
         spawner.Initialize(enemyPrefab, min, max, batch);
         gameManager.Initialize(spawner, player, cooldown);
     }

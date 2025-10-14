@@ -7,28 +7,13 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float speed = 1f;
     private InputAction movementInput;
     private Vector3 movement;
-    private Vector3 startingPosition;
-    private Vector3 top;
-    private Vector3 bottom;
+    private Camera mainCam;
 
 
-    public void Initialize(InputActionAsset actions, Vector3 startingPosition, Vector3 bottom, Vector3 top)
+    private void Awake()
     {
-        this.actions = actions;
-        this.startingPosition = startingPosition;
-        SetPosition(startingPosition);
-        this.top = top;
-        this.bottom = bottom;
+        movementInput = actions.FindActionMap("Player").FindAction("Movement");
     }
-
-    public void Process()
-    {
-        Vector2 input = movementInput.ReadValue<Vector2>();
-        movement = new(input.x, input.y, 0f);
-
-        Move();
-    }
-
 
     private void OnEnable()
     {
@@ -41,10 +26,24 @@ public class PlayerControl : MonoBehaviour
         actions.FindActionMap("Player").Disable();
     }
 
-    private void Awake()
+    public void Initialize(InputActionAsset actions, Vector3 startingPosition, Camera mainCam)
     {
-        movementInput = actions.FindActionMap("Player").FindAction("Movement");
+        this.actions = actions;
+        this.mainCam = mainCam;
+        SetPosition(startingPosition);
     }
+
+    public void Process()
+    {
+        Vector2 input = movementInput.ReadValue<Vector2>();
+        movement = new(input.x, input.y, 0f);
+        Move();
+
+        if (!(input.x == 0) || !(input.y == 0)) ClampToScreen();
+        Debug.Log("Screen size: " + Screen.width + " x " + Screen.height);
+    }
+
+
 
     private void SetPosition(Vector3 position)
     {
@@ -53,6 +52,26 @@ public class PlayerControl : MonoBehaviour
 
     private void Move()
     {
-        transform.position += movement * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * movement;
+        Debug.Log("After movement: " + transform.position);
+    }
+
+    private void ClampToScreen()
+    {
+        // Get screen position
+        Vector3 screenPosition = mainCam.WorldToScreenPoint(transform.position);
+        Debug.Log("Screen position: " + screenPosition);
+
+        // Compare screen position and clamp it
+        screenPosition.x = Mathf.Clamp(screenPosition.x, 0f, Screen.width);
+        screenPosition.y = Mathf.Clamp(screenPosition.y, 0f, Screen.height);
+        Debug.Log("Clamped screen pos: " + screenPosition);
+
+        // Convert back to world coordinates
+        Vector3 clampedWordPosition = mainCam.ScreenToWorldPoint(screenPosition);
+        Debug.Log("Back to world: " + clampedWordPosition);
+
+        // Apply changes
+        transform.position = clampedWordPosition;
     }
 }
