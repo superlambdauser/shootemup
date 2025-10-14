@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8692855540909814752}
   - component: {fileID: 3673821761440506569}
   - component: {fileID: -1398686790902247414}
+  - component: {fileID: -4399053657144523964}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -103,7 +104,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -125,3 +126,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: d2330c072dc089447873a10e8fb390cd, type: 3}
   speed: 5
+--- !u!114 &-4399053657144523964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2571855279567986370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ebedd30088f17429ac7c3a98e43a20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lives: 3

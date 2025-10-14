@@ -8,6 +8,11 @@ public class EnemyBehaviour : MonoBehaviour, IPoolClient
     [SerializeField] private Vector3 speed = Vector3.left * 10f;
     private GameManager gameManager;
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log($"COllision with {other}");
+        gameManager.EnemyFallAsleep(this);
+    }
 
     public void Initialize(GameManager gameManager)
     {

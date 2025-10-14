@@ -5,6 +5,7 @@ public class PlayerControl : MonoBehaviour
 {
     [SerializeField] private InputActionAsset actions;
     [SerializeField] private float speed = 1f;
+    [SerializeField] private int lives = 3;
     private InputAction movementInput;
     private Vector3 movement;
     private Camera mainCam;
@@ -26,6 +27,16 @@ public class PlayerControl : MonoBehaviour
         actions.FindActionMap("Player").Disable();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log($"COllision with {other}");
+
+        if (other.CompareTag("Enemy"))
+        {
+            lives -= 1;
+        }
+    }
+
     public void Initialize(InputActionAsset actions, Vector3 startingPosition, Camera mainCam)
     {
         this.actions = actions;
@@ -40,7 +51,7 @@ public class PlayerControl : MonoBehaviour
         Move();
 
         if (!(input.x == 0) || !(input.y == 0)) ClampToScreen();
-        Debug.Log("Screen size: " + Screen.width + " x " + Screen.height);
+        // Debug.Log("Screen size: " + Screen.width + " x " + Screen.height);
     }
 
 
@@ -53,25 +64,26 @@ public class PlayerControl : MonoBehaviour
     private void Move()
     {
         transform.position += speed * Time.deltaTime * movement;
-        Debug.Log("After movement: " + transform.position);
+        // Debug.Log("After movement: " + transform.position);
     }
 
     private void ClampToScreen()
     {
         // Get screen position
         Vector3 screenPosition = mainCam.WorldToScreenPoint(transform.position);
-        Debug.Log("Screen position: " + screenPosition);
+        // Debug.Log("Screen position: " + screenPosition);
 
         // Compare screen position and clamp it
         screenPosition.x = Mathf.Clamp(screenPosition.x, 0f, Screen.width);
         screenPosition.y = Mathf.Clamp(screenPosition.y, 0f, Screen.height);
-        Debug.Log("Clamped screen pos: " + screenPosition);
+        // Debug.Log("Clamped screen pos: " + screenPosition);
 
         // Convert back to world coordinates
         Vector3 clampedWordPosition = mainCam.ScreenToWorldPoint(screenPosition);
-        Debug.Log("Back to world: " + clampedWordPosition);
+        // Debug.Log("Back to world: " + clampedWordPosition);
 
         // Apply changes
         transform.position = clampedWordPosition;
     }
+
 }
