@@ -10,7 +10,7 @@ public class EnemyBehaviour : MonoBehaviour, IPoolClient
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"COllision with {other}");
+        // Debug.Log($"COllision with {other}");
         gameManager.EnemyFallAsleep(this);
     }
 
@@ -19,18 +19,18 @@ public class EnemyBehaviour : MonoBehaviour, IPoolClient
         this.gameManager = gameManager;
     }
 
-    public void WakeUp(Vector3 position, Quaternion rotation)
-    {
-        gameObject.SetActive(true);
-        transform.SetPositionAndRotation(position, rotation);
-    }
-    
     public void Process()
     {
         if (!Alive) return;
 
         transform.Translate(speed * Time.deltaTime);
     }
+    public void WakeUp(Vector3 position, Quaternion rotation)
+    {
+        gameObject.SetActive(true);
+        transform.SetPositionAndRotation(position, rotation);
+    }
+    
     
     public void Sleep()
     {

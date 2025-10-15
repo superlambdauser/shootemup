@@ -29,11 +29,12 @@ public class PlayerControl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"COllision with {other}");
+        // Debug.Log($"COllision with {other}");
 
         if (other.CompareTag("Enemy"))
         {
             lives -= 1;
+            // Debug.Log($"lives = {lives}");
         }
     }
 

@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,8 +23,12 @@ public class GameInitializer : MonoBehaviour
 
     [Header("Spawner :")]
     [SerializeField] private Spawner spawner;
-    [SerializeField] private int batch;
-    [SerializeField] private float cooldown;
+    [SerializeField] private int enemiesBatch;
+    [SerializeField] private float enemiesSpawnCooldown;
+
+    [Header("Weapon/Bullets shooting :")]
+    [SerializeField] private PlayerShooting weapon;
+    [SerializeField] private float bulletsRateCooldown;
 
     [Header("Screen/World positions data :")]
     [SerializeField] private float distanceFromCamera = 10;
@@ -51,7 +54,7 @@ public class GameInitializer : MonoBehaviour
         (Vector3 min, Vector3 max) = cameraManager.GetRightBorderPoints(distanceFromCamera);
         playerPosition = new (0f, 0f, distanceFromCamera);
         player.Initialize(actions, playerPosition, cameraManager.cam);
-        spawner.Initialize(enemyPrefab, min, max, batch);
-        gameManager.Initialize(spawner, player, cooldown);
+        spawner.Initialize(enemyPrefab, min, max, enemiesBatch);
+        gameManager.Initialize(spawner, player, weapon, enemiesSpawnCooldown, bulletsRateCooldown);
     }
 }
